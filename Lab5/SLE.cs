@@ -35,6 +35,17 @@ namespace Lab5
             }
         }
 
+        public void FillFromMatrix(double[,] mat)
+        {
+            for(int i = 0; i < dimension; i++)
+            {
+                for(int j = 0; j < dimension + 1; j++)
+                {
+                    this.mat[i, j] = mat[i, j];
+                }
+            }
+        }
+
         public double Get(int i, int j)
         {
             return mat[i,j];
@@ -43,6 +54,20 @@ namespace Lab5
         public void Set(int i, int j, double d)
         {
             mat[i, j] = d;
+        }
+
+        public double[] VerifySolution(double[] solution)
+        {
+            double[] sleSum = new double[dimension];
+            for(int i = 0; i < dimension; i++)
+            {
+                sleSum[i] = 0;
+                for(int j = 0; j < dimension; j++)
+                {
+                    sleSum[i] += mat[i, j] * solution[j];
+                }
+            }
+            return sleSum;
         }
 
         public int Dimension { get => dimension; set => dimension = value; }

@@ -23,26 +23,25 @@ namespace Lab5
         public MainWindow()
         {
             InitializeComponent();
-            SLE sle = new SLE(3);
-            sle.MakeRandom(-5,5);
+            SLE sle = null;
+            double[,] mat = null;
 
-            sle.Set(0, 0, 10);
-            sle.Set(0, 1, 1);
-            sle.Set(0, 2, -1);
+            try
+            {
+                mat = Reader.ReadMatrixFromTextBox(tbInput);    
+            }
+            catch(Exception)
+            {
+                Console.WriteLine("Некоректные данные");
+            }
 
-            sle.Set(1, 0, 1);
-            sle.Set(1, 1, 10);
-            sle.Set(1, 2, -1);
+            if(mat != null)
+            {
+                sle = new SLE(mat.GetLength(0));
+                sle.FillFromMatrix(mat);
+            }
 
-            sle.Set(2, 0, -1);
-            sle.Set(2, 1, 1);
-            sle.Set(2, 2, 10);
-
-            sle.Set(0, 3, 11);
-            sle.Set(1, 3, 10);
-            sle.Set(2, 3, 10);
-
-            double[] solved = Solver.SLESimpleIteration(sle, 0.001);
+            SLESolveResult solved = Solver.SLESimpleIteration(sle, 0.001);
         }
     }
 }

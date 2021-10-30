@@ -6,24 +6,23 @@ using System.Threading.Tasks;
 
 namespace Lab5
 {
+	public struct SLESolveResult
+    {
+		public bool convergence;
+		public int iterations;
+		public double[] solution;
+    }
 	class Solver
 	{
-		public static double[] SLESimpleIteration(SLE sle, double eps)
+		public static SLESolveResult SLESimpleIteration(SLE sle, double eps)
 		{
+			SLESolveResult result = new SLESolveResult();
 			int n = sle.Dimension;
 
 			// Check convergence
-
-			// Norm
 			bool convergenceFromNorm = CheckConvergenceFromNorms(sle);
-			if(!convergenceFromNorm) SleGetMaxOnDiagonals(sle);
-			convergenceFromNorm = CheckConvergenceFromNorms(sle);
-
-			// Another method
-			if(!convergenceFromNorm)
-            {
-
-            }
+			result.convergence = convergenceFromNorm;
+			if (!convergenceFromNorm) return result;
 
 			// Init all support matricies
 
@@ -50,8 +49,10 @@ namespace Lab5
 
 			// Calculate
 			bool epsReahced = true;
+			int iterations = 0;
 			do
 			{
+				iterations++;
 				// Next iteration
 				double[] xNext = new double[n];
 				for (int i = 0; i < n; i++)
@@ -79,7 +80,10 @@ namespace Lab5
 			}
 			while (!epsReahced);
 
-			return x;
+			result.iterations = iterations;
+			result.solution = x;
+
+			return result;
 		}
 
 		private static bool CheckConvergenceFromNorms(SLE sle)
@@ -87,32 +91,23 @@ namespace Lab5
 			bool convergenceFromNorm = true;
 
 			double firstNormMax = Double.NegativeInfinity;
-			for (int i = 0; i < sle.Dimension; i++) {
+			double secondNormMax = Double.NegativeInfinity;
+			for (int i = 0; i < sle.Dimension; i++) 
+			{
 				double firstNormNext = 0;
-				for (int j = 0; j < sle.Dimension; j++) {
+				double secondNormNext = 0;
+				for (int j = 0; j < sle.Dimension; j++) 
+				{
 					if (i == j) continue;
 					firstNormNext += Math.Abs(sle.Get(i, j) / sle.Get(i,i));
+					secondNormNext += Math.Abs(sle.Get(j, i) / sle.Get(j, j));
 				}
 				if (firstNormNext > firstNormMax) firstNormMax = firstNormNext;
-			}
-
-			double secondNormMax = Double.NegativeInfinity;
-			for (int j = 0; j < sle.Dimension; j++) {
-				double secondNormNext = 0;
-				for (int i = 0; i < sle.Dimension; i++) {
-					if (i == j) continue;
-					secondNormNext += Math.Abs(sle.Get(i, j) / sle.Get(j, j));
-				}
 				if (secondNormNext > secondNormMax) secondNormMax = secondNormNext;
 			}
 
 			if (!(firstNormMax < 1 || secondNormMax < 1)) convergenceFromNorm = false;
 			return convergenceFromNorm;
 		}
-
-		private static void SleGetMaxOnDiagonals(SLE sle)
-        {
-
-        }
 	}
 }
