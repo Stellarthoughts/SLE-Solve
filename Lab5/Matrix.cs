@@ -8,7 +8,7 @@ namespace Lab5
 {
     public class Matrix
     {
-        public static double[,] Inverse(double[,] mat, double eps)
+        public static double[,] Inverse(SolveSLE method, double[,] mat, double eps)
         {
             int N = mat.GetLength(0);
             int M = mat.GetLength(1);
@@ -20,7 +20,11 @@ namespace Lab5
                 SLE row = new SLE(N);
                 row.FillFromMatrix(mat);
                 row.Set(j, row.Dimension, 1);
-                SLESolverResult solved = SLESolver.Zeydel(row, eps);
+                SLESolverResult solved = method(new SLESolverSettings()
+                {
+                    sle = row,
+                    eps = eps
+                });
                 for(int i = 0; i < N; i++)
                     inverse[i,j] = solved.solution[i];
             }

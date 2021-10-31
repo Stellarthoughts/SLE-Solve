@@ -16,11 +16,15 @@ namespace Lab5
 		public double eps;
     }
 
+	public delegate SLESolverResult SolveSLE(SLESolverSettings set);
+
 	class SLESolver
-	{
-		public delegate SLESolverResult SolveSLE(SLESolverSettings set);
-		public static SLESolverResult SimpleIteration(SLE sle, double eps)
+	{	
+		public static SLESolverResult SimpleIteration(SLESolverSettings set)
 		{
+			SLE sle = set.sle;
+			double eps = set.eps;
+
 			SLESolverResult result = new SLESolverResult();
 			int n = sle.Dimension;
 			result.iterative = true;
@@ -96,8 +100,11 @@ namespace Lab5
 			return result;
 		}
 
-		public static SLESolverResult Zeydel(SLE sle, double eps)
+		public static SLESolverResult Zeydel(SLESolverSettings set)
 		{
+			SLE sle = set.sle;
+			double eps = set.eps;
+
 			SLESolverResult result = new SLESolverResult();
 			int n = sle.Dimension;
 			result.iterative = true;
@@ -178,8 +185,10 @@ namespace Lab5
 			return result;
 		}
 
-		public static SLESolverResult LUDecomp(SLE sle)
+		public static SLESolverResult LUDecomp(SLESolverSettings set)
 		{
+			SLE sle = set.sle;
+
 			SLESolverResult result = new SLESolverResult();
 			result.iterative = false;
 

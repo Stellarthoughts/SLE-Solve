@@ -41,15 +41,21 @@ namespace Lab5
                 sle.FillFromMatrix(mat);
             }
 
-            SLESolverResult simple = SLESolver.SimpleIteration(sle, 0.001);
-            SLESolverResult zeydel = SLESolver.Zeydel(sle, 0.001);
-            SLESolverResult lu = SLESolver.LUDecomp(sle);
+            SLESolverSettings set = new()
+            {
+                sle = sle,
+                eps = 0.001
+            };
+
+            SLESolverResult simple = SLESolver.SimpleIteration(set);
+            SLESolverResult zeydel = SLESolver.Zeydel(set);
+            SLESolverResult lu = SLESolver.LUDecomp(set);
             double[] verifySimple = sle.VerifySolution(simple.solution);
             double[] verifyZeydel = sle.VerifySolution(zeydel.solution);
             double[] verifyLU = sle.VerifySolution(lu.solution);
 
             double[,] SLEMat = sle.GetPrimeMatrix();
-            double[,] inverseSLEMat = Matrix.Inverse(SLEMat, 0.0001);
+            double[,] inverseSLEMat = Matrix.Inverse(SLESolver.Zeydel, SLEMat, 0.0001);
             double[,] unit = Matrix.Multiply(SLEMat, inverseSLEMat);
         }
 
