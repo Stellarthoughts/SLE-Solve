@@ -47,6 +47,20 @@ namespace Lab5
             double[] verifySimple = sle.VerifySolution(simple.solution);
             double[] verifyZeydel = sle.VerifySolution(zeydel.solution);
             double[] verifyLU = sle.VerifySolution(lu.solution);
+
+            double[,] SLEMat = sle.GetPrimeMatrix();
+            double[,] inverseSLEMat = Matrix.Inverse(SLEMat, 0.0001);
+            double[,] unit = Matrix.Multiply(SLEMat, inverseSLEMat);
+        }
+
+        private void btnSLE_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnInverseMat_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

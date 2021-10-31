@@ -5,23 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab5"
         mc:Ignorable="d"
-        Title="MainWindow" Height="380" Width="394">
+        Title="MainWindow" Height="314" Width="385">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="163*"/>
-            <RowDefinition Height="201*"/>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="34*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="175*"/>
-            <ColumnDefinition Width="219*"/>
+            <ColumnDefinition Width="175"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox Name="tbInput" Text="10  1   -1  11&#xA;1    10 -1  10&#xA;-1   1   10 10&#xA;" TextWrapping="Wrap" Margin="10,10,10,10" FontSize="14"/>
-        <TextBlock Grid.Column="1" Text="TextBlock" TextWrapping="Wrap" Margin="10,10,0,10" HorizontalAlignment="Left" Width="153"/>
-        <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="15" Width="85"/>
-        <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="10,30,0,0" Grid.Row="1" VerticalAlignment="Top" Height="15" Width="85"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="10,50,0,0" Grid.Row="1" VerticalAlignment="Top" Width="85" Height="20"/>
-        <TextBlock Grid.Column="1" Text="TextBlock" TextWrapping="Wrap" Margin="10,10,77,10" Grid.Row="1"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="85" Height="20"/>
+        <Rectangle Grid.Column="1" Margin="10,10,10,10" Stroke="#FF8D8D8D" Grid.RowSpan="2"/>
+
+        <TextBox x:Name="tbInput" Text="10  1   -1  11&#xA;1    10 -1  10&#xA;-1   1   10 10&#xA;" TextWrapping="Wrap" Margin="10,10,0,10" FontSize="14" HorizontalAlignment="Left" Width="155"/>
+        <TextBlock x:Name="tbOutput" Grid.Column="1" Text="Вывод" TextWrapping="Wrap" Margin="10,10,10,10" Grid.RowSpan="2" FontSize="14"/>
+        <RadioButton x:Name="rbSimpleIter" Content="Простые итерации" HorizontalAlignment="Left" Margin="10,0,0,127" Grid.Row="1" VerticalAlignment="Bottom" Height="19" Width="146" FontSize="14"/>
+        <RadioButton x:Name="rbZeydel" Content="Метод Зейделя" HorizontalAlignment="Left" Margin="10,0,0,103" Grid.Row="1" VerticalAlignment="Bottom" Height="18" Width="146" FontSize="14"/>
+        <Button x:Name="btnSLE" Content="СЛАУ" HorizontalAlignment="Left" Margin="18,0,0,44" Grid.Row="1" VerticalAlignment="Bottom" Width="130" Height="22" FontSize="14" Click="btnSLE_Click"/>
+        <Button x:Name="btnInverseMat" Content="Обратная матрица" HorizontalAlignment="Left" Margin="18,0,0,17" Grid.Row="1" VerticalAlignment="Bottom" Width="130" Height="22" FontSize="14" Click="btnInverseMat_Click"/>
+        <RadioButton x:Name="rbLU" Content="LU-разложения" HorizontalAlignment="Left" Margin="10,0,0,78" Grid.Row="1" VerticalAlignment="Bottom" Height="18" Width="146" FontSize="14"/>
 
     </Grid>
 </Window>
