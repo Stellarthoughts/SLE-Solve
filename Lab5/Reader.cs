@@ -11,7 +11,7 @@ namespace Lab5
 {
     public class Reader
     {
-        public static double[,] MatrixFromString(string text)
+        public static T[,] MatrixFromString<T>(string text)
         {
             text = NormalizeWhiteSpaceForLoop(text);
             text = text.Replace("\r", "\n");
@@ -22,21 +22,15 @@ namespace Lab5
             {
                 string[] lineSplit = line.Split(" ");
                 foreach(string word in lineSplit)
-                {
                     digits.Add(word);
-                }
             }
 
             int numbersInLine = digits.Count / split.Length;
-            double[,] read = new double[split.Length, numbersInLine];
+            T[,] read = new T[split.Length, numbersInLine];
 
             for (int i = 0; i < split.Length; i++)
-            {
                 for(int j = 0; j < numbersInLine; j++)
-                {
-                    read[i, j] = Double.Parse(digits[i * numbersInLine + j], CultureInfo.InvariantCulture); 
-                }
-            }
+                    read[i, j] = (T) (object) Double.Parse(digits[i * numbersInLine + j], CultureInfo.InvariantCulture); 
             
             return read;
         }

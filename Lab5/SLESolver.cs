@@ -5,6 +5,7 @@ namespace Lab5
 	public struct SLESolverResult
     {
 		public bool convergence;
+		public bool iterative;
 		public int iterations;
 		public double[] solution;
     }
@@ -15,6 +16,7 @@ namespace Lab5
 		{
 			SLESolverResult result = new SLESolverResult();
 			int n = sle.Dimension;
+			result.iterative = true;
 
 			// Check convergence
 			bool convergenceFromNorm = CheckConvergenceNorms(sle);
@@ -91,6 +93,7 @@ namespace Lab5
 		{
 			SLESolverResult result = new SLESolverResult();
 			int n = sle.Dimension;
+			result.iterative = true;
 
 			// Check convergence
 			bool convergenceFromNorm = CheckConvergenceNorms(sle);
@@ -168,7 +171,72 @@ namespace Lab5
 			return result;
 		}
 
+		public static SLESolverResult LUDecomp(SLE sle)
+        {
+			SLESolverResult result = new SLESolverResult();
+			result.convergence = true;
+			result.iterative = false;
+			int N = sle.Dimension;
 
+			double[,] u = new double[N, N];
+			double[,] l = new double[N, N];
+
+			for (int i = 0; i < N; i++)
+			{
+				for (int j = 0; j < N; j++)
+				{
+					if (i > j) continue;
+					u[i, j] = sle.Get(i, j);
+					for (int k = 0; k < i; k++)
+					{
+						u[i, j] -= l[i, k] * u[k, j];
+					}
+				}
+
+				for(int j = 0; j <= i; j++)
+                {
+					if (j == i)
+					{
+						l[i, j] = 1;
+						continue;
+					}
+					double term = 0;
+					for(int k = 0; k < j; k++)
+                    {
+						term += l[i, k] * u[k, j];
+                    }
+					l[i, j] = (sle.Get(i, j) - term) / u[j, j];
+                }
+			}
+
+			double[] y = new double[N];
+
+			for(int i = 0; i < N; i++)
+            {
+				double term = 0;
+				for(int k = 0; k < i; k++)
+                {
+					term += l[i, k] * y[k];
+                }
+				y[i] = sle.Get(i, N) - term;
+            }
+
+
+			double[] x = new double[N];
+			for(int i = N-1; i >= 0; i--)
+            {
+				double term = 0;
+				for(int k = i+1; k < N; k++)
+                {
+					term += u[i, k] * x[k];
+                }
+				x[i] = (y[i] - term) / u[i, i];
+            }
+
+			result.solution = x;
+
+			return result;
+		}
 
 		private static bool CheckConvergenceNorms(SLE sle)
 		{
@@ -193,5 +261,10 @@ namespace Lab5
 			if (!(firstNormMax < 1 || secondNormMax < 1)) convergenceFromNorm = false;
 			return convergenceFromNorm;
 		}
+
+		private static bool CheckConvergenceMainMinors(SLE sle)
+        {
+			return true;
+        }
 	}
 }
