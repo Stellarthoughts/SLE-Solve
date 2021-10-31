@@ -37,9 +37,9 @@ namespace Lab5
 
 		public void FillFromMatrix(double[,] mat)
 		{
-			for(int i = 0; i < dimension; i++)
+			for(int i = 0; i < mat.GetLength(0); i++)
 			{
-				for(int j = 0; j < dimension + 1; j++)
+				for(int j = 0; j < mat.GetLength(1); j++)
 				{
 					this.mat[i, j] = mat[i, j];
 				}

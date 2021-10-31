@@ -10,8 +10,15 @@ namespace Lab5
 		public double[] solution;
     }
 
+	public struct SLESolverSettings
+    {
+		public SLE sle;
+		public double eps;
+    }
+
 	class SLESolver
 	{
+		public delegate SLESolverResult SolveSLE(SLESolverSettings set);
 		public static SLESolverResult SimpleIteration(SLE sle, double eps)
 		{
 			SLESolverResult result = new SLESolverResult();
@@ -29,13 +36,13 @@ namespace Lab5
 			double[,] C = new double[n, n];
 			double[] b = new double[n];
 
-			for(int i = 0; i < n; i++)
+			for (int i = 0; i < n; i++)
 			{
 				b[i] = sle.Get(i, n) / sle.Get(i, i);
 				x[i] = b[i];
-				for(int j = 0; j < n; j++)
+				for (int j = 0; j < n; j++)
 				{
-					if(i == j)
+					if (i == j)
 					{
 						C[i, j] = 0;
 					}
@@ -44,7 +51,7 @@ namespace Lab5
 						C[i, j] = -sle.Get(i, j) / sle.Get(i, i);
 					}
 				}
-			}     
+			}
 
 			// Calculate
 			bool epsReahced = true;
@@ -59,7 +66,7 @@ namespace Lab5
 					xNext[i] = b[i];
 
 					double term = 0;
-					for(int j = 0; j < n; j++)
+					for (int j = 0; j < n; j++)
 					{
 						if (i == j) continue;
 						term += -C[i, j] * x[j];
@@ -72,7 +79,7 @@ namespace Lab5
 				epsReahced = true;
 				for (int i = 0; i < n; i++)
 				{
-					if(Math.Abs(xNext[i] - x[i]) >= eps)
+					if (Math.Abs(xNext[i] - x[i]) >= eps)
 					{
 						epsReahced = false;
 						break;
@@ -137,15 +144,15 @@ namespace Lab5
 					double termOne = 0;
 					double termTwo = 0;
 
-					for(int j = 0; j < i; j++)
-                    {
+					for (int j = 0; j < i; j++)
+					{
 						termOne += -C[i, j] * xNext[j];
-                    }
+					}
 
-					for(int j = i + 1; j < n; j++)
-                    {
+					for (int j = i + 1; j < n; j++)
+					{
 						termTwo += -C[i, j] * x[j];
-                    }
+					}
 
 					xNext[i] -= termOne + termTwo;
 				}
@@ -172,10 +179,14 @@ namespace Lab5
 		}
 
 		public static SLESolverResult LUDecomp(SLE sle)
-        {
+		{
 			SLESolverResult result = new SLESolverResult();
-			result.convergence = true;
 			result.iterative = false;
+
+			bool convergence = CheckConvergenceMainMinors(sle);
+			result.convergence = convergence;
+			if (!convergence) return result;
+
 			int N = sle.Dimension;
 
 			double[,] u = new double[N, N];
@@ -193,45 +204,45 @@ namespace Lab5
 					}
 				}
 
-				for(int j = 0; j <= i; j++)
-                {
+				for (int j = 0; j <= i; j++)
+				{
 					if (j == i)
 					{
 						l[i, j] = 1;
 						continue;
 					}
 					double term = 0;
-					for(int k = 0; k < j; k++)
-                    {
+					for (int k = 0; k < j; k++)
+					{
 						term += l[i, k] * u[k, j];
-                    }
+					}
 					l[i, j] = (sle.Get(i, j) - term) / u[j, j];
-                }
+				}
 			}
 
 			double[] y = new double[N];
 
-			for(int i = 0; i < N; i++)
-            {
+			for (int i = 0; i < N; i++)
+			{
 				double term = 0;
-				for(int k = 0; k < i; k++)
-                {
+				for (int k = 0; k < i; k++)
+				{
 					term += l[i, k] * y[k];
-                }
+				}
 				y[i] = sle.Get(i, N) - term;
-            }
+			}
 
 
 			double[] x = new double[N];
-			for(int i = N-1; i >= 0; i--)
-            {
+			for (int i = N - 1; i >= 0; i--)
+			{
 				double term = 0;
-				for(int k = i+1; k < N; k++)
-                {
+				for (int k = i + 1; k < N; k++)
+				{
 					term += u[i, k] * x[k];
-                }
+				}
 				x[i] = (y[i] - term) / u[i, i];
-            }
+			}
 
 			result.solution = x;
 
@@ -244,14 +255,14 @@ namespace Lab5
 
 			double firstNormMax = Double.NegativeInfinity;
 			double secondNormMax = Double.NegativeInfinity;
-			for (int i = 0; i < sle.Dimension; i++) 
+			for (int i = 0; i < sle.Dimension; i++)
 			{
 				double firstNormNext = 0;
 				double secondNormNext = 0;
-				for (int j = 0; j < sle.Dimension; j++) 
+				for (int j = 0; j < sle.Dimension; j++)
 				{
 					if (i == j) continue;
-					firstNormNext += Math.Abs(sle.Get(i, j) / sle.Get(i,i));
+					firstNormNext += Math.Abs(sle.Get(i, j) / sle.Get(i, i));
 					secondNormNext += Math.Abs(sle.Get(j, i) / sle.Get(j, j));
 				}
 				if (firstNormNext > firstNormMax) firstNormMax = firstNormNext;
@@ -263,8 +274,13 @@ namespace Lab5
 		}
 
 		private static bool CheckConvergenceMainMinors(SLE sle)
-        {
-			return true;
-        }
+		{
+			double[,] mat = sle.GetPrimeMatrix();
+			for (int k = 1; k <= sle.Dimension; k++)
+				for (int i = 0; i < k; i++)
+					for (int j = 0; j < k; j++)
+						if (mat[i, j] != 0) return true;
+			return false;
+		}
 	}
 }
