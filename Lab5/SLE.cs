@@ -61,7 +61,7 @@ namespace Lab5
             double[] sleSum = new double[dimension];
             for(int i = 0; i < dimension; i++)
             {
-                sleSum[i] = 0;
+                sleSum[i] = -mat[i,dimension];
                 for(int j = 0; j < dimension; j++)
                 {
                     sleSum[i] += mat[i, j] * solution[j];
