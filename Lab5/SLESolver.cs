@@ -16,7 +16,7 @@ namespace Lab5
 		public double eps;
     }
 
-	public delegate SLESolverResult SolveSLE(SLESolverSettings set);
+	public delegate SLESolverResult SLESolvingMethod(SLESolverSettings set);
 
 	class SLESolver
 	{	

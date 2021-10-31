@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtremumScan;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,17 @@ namespace Lab5
     /// </summary>
     public partial class MainWindow : Window
     {
+        private RBSelector<SLESolvingMethod> methodSelector;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            methodSelector = new(
+                new List<RadioButton>() {rbSimpleIter, rbZeydel, rbLU},
+                new List<SLESolvingMethod>() {SLESolver.SimpleIteration, SLESolver.Zeydel, SLESolver.LUDecomp}
+                );
+
             SLE sle = null;
             double[,] mat = null;
 
@@ -55,7 +64,7 @@ namespace Lab5
             double[] verifyLU = sle.VerifySolution(lu.solution);
 
             double[,] SLEMat = sle.GetPrimeMatrix();
-            double[,] inverseSLEMat = Matrix.Inverse(SLESolver.Zeydel, SLEMat, 0.0001);
+            double[,] inverseSLEMat = Matrix.Inverse(SLESolver.LUDecomp, SLEMat, 0.0001);
             double[,] unit = Matrix.Multiply(SLEMat, inverseSLEMat);
         }
 
