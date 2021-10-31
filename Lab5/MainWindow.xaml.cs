@@ -1,6 +1,7 @@
 ﻿using ExtremumScan;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace Lab5
             }
             catch(Exception)
             {
-                Console.WriteLine("Некоректные данные");
+                
             }
 
             if(mat != null)
@@ -70,12 +71,80 @@ namespace Lab5
 
         private void btnSLE_Click(object sender, RoutedEventArgs e)
         {
+            SLE sle = null;
+            double eps = 0;
+            double[,] mat = null;
 
+            try
+            {
+                mat = Reader.MatrixFromString<double>(tbInput.Text);
+            }
+            catch (Exception)
+            {
+                tbOutput.Text = "Неверные данные: ошибка считывания матрицы.";
+                return;
+            }
+
+            try
+            {
+                eps = Double.Parse(tbEps.Text, CultureInfo.InvariantCulture);
+            }
+            catch(Exception)
+            {
+                tbOutput.Text = "Неверные данные: ошибка считывания точности.";
+                return;
+            }
+
+            if (mat != null)
+            {
+                sle = new SLE(mat.GetLength(0));
+                sle.FillFromMatrix(mat);
+            }
+            else
+            {
+                tbOutput.Text = "Не удалось считать матрицу.";
+                return;
+            }
+
+            SLESolvingMethod method = methodSelector.GetChoice();
+            SLESolverSettings settings = new()
+            {
+                sle = sle,
+                eps = eps
+            };
+            SLESolverResult solved = method(settings);
+
+            if(!solved.convergence)
+            {
+                tbOutput.Text = "Метод не сходится для данной СЛАУ.";
+                return;
+            }
+
+            StringBuilder str = new StringBuilder();
+            if(solved.iterative)
+                str.Append("Количество итераций для метода: " + solved.iterations + "\n");
+            str.Append("Результат работы:\n");
+            str.Append(string.Join(" ", solved.solution.Select(x => x.ToString()).ToArray()) + "\n");
+            str.Append("Проверка:\n");
+            str.Append(string.Join(" ", sle.VerifySolution(solved.solution).Select(x => x.ToString()).ToArray()));
+
+            tbOutput.Text = str.ToString();
         }
 
         private void btnInverseMat_Click(object sender, RoutedEventArgs e)
         {
-
+            SLE sle = null;
+            double[,] mat = null;
+            try
+            {
+                mat = Reader.MatrixFromString<double>(tbInput.Text);
+            }
+            catch (Exception)
+            {
+                tbOutput.Text = "Неверные данные: ошибка считывания матрицы";
+                return;
+            }
+            SLESolvingMethod method = methodSelector.GetChoice();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace ExtremumScan
             choices = ch;
         }
 
-        public T getChoice()
+        public T GetChoice()
         {
             for (int i = 0; i < radioButtons.Count; i++)
             {
