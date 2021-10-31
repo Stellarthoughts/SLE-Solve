@@ -28,7 +28,7 @@ namespace Lab5
 
             try
             {
-                mat = Reader.ReadMatrixFromTextBox(tbInput);    
+                mat = Reader.MatrixFromString(tbInput.Text);    
             }
             catch(Exception)
             {
@@ -41,7 +41,10 @@ namespace Lab5
                 sle.FillFromMatrix(mat);
             }
 
-            SLESolveResult solved = Solver.SLESimpleIteration(sle, 0.001);
+            SLESolverResult simple = SLESolver.SimpleIteration(sle, 0.001);
+            SLESolverResult zeydel = SLESolver.Zeydel(sle, 0.001);
+            double[] verifySimple = sle.VerifySolution(simple.solution);
+            double[] verifyZeydel = sle.VerifySolution(zeydel.solution);
         }
     }
 }

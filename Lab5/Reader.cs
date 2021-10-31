@@ -11,10 +11,10 @@ namespace Lab5
 {
     public class Reader
     {
-        public static double[,] ReadMatrixFromTextBox(TextBox tb)
+        public static double[,] MatrixFromString(string text)
         {
-            string text = tb.Text;
             text = NormalizeWhiteSpaceForLoop(text);
+            text = text.Replace("\r", "\n");
             text = text.Trim('\n');
             string[] split = text.Split("\n");
             List<string> digits = new List<string>();
