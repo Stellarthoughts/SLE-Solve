@@ -25,7 +25,7 @@ namespace Lab5
 			SLE sle = set.sle;
 			double eps = set.eps;
 
-			SLESolverResult result = new SLESolverResult();
+			SLESolverResult result = new();
 			int n = sle.Dimension;
 			result.iterative = true;
 
@@ -58,7 +58,7 @@ namespace Lab5
 			}
 
 			// Calculate
-			bool epsReahced = true;
+			bool epsReahced;
 			int iterations = 0;
 			do
 			{
@@ -105,7 +105,7 @@ namespace Lab5
 			SLE sle = set.sle;
 			double eps = set.eps;
 
-			SLESolverResult result = new SLESolverResult();
+			SLESolverResult result = new();
 			int n = sle.Dimension;
 			result.iterative = true;
 
@@ -138,7 +138,7 @@ namespace Lab5
 			}
 
 			// Calculate
-			bool epsReahced = true;
+			bool epsReahced;
 			int iterations = 0;
 			do
 			{
@@ -189,7 +189,7 @@ namespace Lab5
 		{
 			SLE sle = set.sle;
 
-			SLESolverResult result = new SLESolverResult();
+			SLESolverResult result = new();
 			result.iterative = false;
 
 			bool convergence = CheckConvergenceMainMinors(sle);

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
 
-namespace ExtremumScan
+namespace Lab5
 {
     public class RBSelector<T>
     {
-        private List<RadioButton> radioButtons;
-        private List<T> choices;
+        private readonly List<RadioButton> radioButtons;
+        private readonly List<T> choices;
 
         public RBSelector(List<RadioButton> rb, List<T> ch)
         {
@@ -23,7 +23,7 @@ namespace ExtremumScan
                     return choices[i];
                 }
             }
-            return default(T);
+            return default;
         }
     }
 }
