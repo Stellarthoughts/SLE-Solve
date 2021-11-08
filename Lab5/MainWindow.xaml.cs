@@ -138,6 +138,7 @@ namespace Lab5
             catch(Exception ex)
             {
                 tbOutput.Text = ex.Message;
+                return;
             }
             
             try
@@ -147,6 +148,7 @@ namespace Lab5
             catch(Exception ex)
             {
                 tbOutput.Text = ex.Message;
+                return;
             }
 
             StringBuilder str = new();

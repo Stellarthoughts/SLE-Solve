@@ -15,7 +15,9 @@ namespace Lab5
         {
             text = NormalizeWhiteSpaceForLoop(text);
             text = text.Replace("\r", "\n");
+            text = text.Replace("\t", " ");
             text = text.Trim('\n');
+            text = text.Trim(' ');
             string[] split = text.Split("\n");
             List<string> digits = new List<string>();
             foreach (string line in split)
